@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Recall Learning</title>
+    <title>AI-Powered Active Recall</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="title">Active Recall Learning</h1>
-            <p class="subtitle">Hover over each line to reveal the content</p>
+            <h1 class="title">AI-Powered Active Recall</h1>
+            <p class="subtitle">Test your memory with AI-powered feedback</p>
         </header>
+
+        <!-- API Key Section -->
+        <section class="api-section">
+            <details>
+                <summary class="api-toggle">⚙️ API Settings (Click to expand)</summary>
+                <div class="api-container">
+                    <label for="apiKeyInput" class="api-label">OpenRouter API Key:</label>
+                    <div class="api-input-group">
+                        <input 
+                            type="password" 
+                            id="apiKeyInput" 
+                            class="api-input" 
+                            placeholder="sk-or-v1-..."
+                        >
+                        <button id="saveApiKey" class="btn btn-small">Save</button>
+                        <button id="clearApiKey" class="btn btn-small btn-secondary">Clear</button>
+                    </div>
+                    <p class="api-hint">Get your API key from <a href="https://openrouter.ai/" target="_blank">openrouter.ai</a></p>
+                    <p class="api-status" id="apiStatus"></p>
+                </div>
+            </details>
+        </section>
 
         <!-- Input Section -->
         <section class="input-section">
-            <h2 class="section-title">Add Your Own Content</h2>
+            <h2 class="section-title">Add Your Learning Content</h2>
             <div class="input-container">
                 <textarea 
                     id="textInput" 
@@ -23,62 +45,85 @@
                     placeholder="Type or paste your learning content here... (one line per paragraph or use line breaks)"
                     rows="4"></textarea>
                 <div class="button-group">
-                    <button id="addButton" class="btn btn-primary">Add Lines</button>
+                    <button id="addButton" class="btn btn-primary">Add Content</button>
                     <button id="clearButton" class="btn btn-secondary">Clear All</button>
                 </div>
             </div>
         </section>
 
-        <!-- User Added Content -->
-        <section class="topic" id="userContent" style="display: none;">
-            <h2 class="section-title">Your Content</h2>
-            <div id="userLines"></div>
+        <!-- User Practice Content (Two Column Layout) -->
+        <section class="practice-section" id="practiceSection" style="display: none;">
+            <div class="practice-header">
+                <h2 class="section-title">Practice Mode</h2>
+                <div class="practice-controls">
+                    <label class="toggle-container">
+                        <input type="checkbox" id="teslaMode" class="toggle-checkbox">
+                        <span class="toggle-label">⚡ Tesla Memory Palace Mode</span>
+                        <span class="toggle-hint">Unlock vivid spatial visualization</span>
+                    </label>
+                    <button id="analyzeButton" class="btn btn-primary btn-analyze">🤖 Analyze My Answers</button>
+                </div>
+            </div>
+            <p class="practice-instructions">Hover over the left column to peek at the answer. Write what you remember in the right column.</p>
+            
+            <div id="practiceContent" class="practice-grid"></div>
         </section>
 
-        <main class="content">
-            <section class="topic">
-                <h2 class="section-title">What is Active Recall?</h2>
-                <div class="line">Active recall is a learning technique where you actively stimulate memory during the learning process.</div>
-                <div class="line">Instead of passively re-reading material, you test yourself on what you've learned.</div>
-                <div class="line">This method strengthens neural pathways and improves long-term retention.</div>
-                <div class="line">Studies show it's one of the most effective study strategies available.</div>
-            </section>
+        <!-- AI Feedback Section -->
+        <section class="feedback-section" id="feedbackSection" style="display: none;">
+            <h2 class="section-title">AI Feedback</h2>
+            <div id="feedbackContent" class="feedback-content"></div>
+        </section>
 
-            <section class="topic">
-                <h2 class="section-title">Key Benefits</h2>
-                <div class="line">• Enhances long-term memory retention by up to 50%</div>
-                <div class="line">• Identifies knowledge gaps early in the learning process</div>
-                <div class="line">• Reduces study time while increasing comprehension</div>
-                <div class="line">• Builds confidence through repeated successful retrieval</div>
-                <div class="line">• Creates stronger neural connections in the brain</div>
-            </section>
+        <!-- Demo Content (Collapsible) -->
+        <section class="demo-section">
+            <details>
+                <summary class="demo-toggle">📚 View Demo Content (Examples)</summary>
+                <main class="content">
+                    <section class="topic">
+                        <h2 class="section-title">What is Active Recall?</h2>
+                        <div class="line">Active recall is a learning technique where you actively stimulate memory during the learning process.</div>
+                        <div class="line">Instead of passively re-reading material, you test yourself on what you've learned.</div>
+                        <div class="line">This method strengthens neural pathways and improves long-term retention.</div>
+                        <div class="line">Studies show it's one of the most effective study strategies available.</div>
+                    </section>
 
-            <section class="topic">
-                <h2 class="section-title">How to Practice</h2>
-                <div class="line">1. Read and understand the material thoroughly</div>
-                <div class="line">2. Close your notes and try to recall the main points</div>
-                <div class="line">3. Write down everything you remember without looking</div>
-                <div class="line">4. Check your answers against the original material</div>
-                <div class="line">5. Focus on areas where recall was difficult</div>
-                <div class="line">6. Repeat the process with increasing time intervals</div>
-            </section>
+                    <section class="topic">
+                        <h2 class="section-title">Key Benefits</h2>
+                        <div class="line">• Enhances long-term memory retention by up to 50%</div>
+                        <div class="line">• Identifies knowledge gaps early in the learning process</div>
+                        <div class="line">• Reduces study time while increasing comprehension</div>
+                        <div class="line">• Builds confidence through repeated successful retrieval</div>
+                        <div class="line">• Creates stronger neural connections in the brain</div>
+                    </section>
 
-            <section class="topic">
-                <h2 class="section-title">Common Techniques</h2>
-                <div class="line">Flashcards: Create questions on one side, answers on the other</div>
-                <div class="line">Self-quizzing: Test yourself regularly without looking at notes</div>
-                <div class="line">Teaching others: Explain concepts to someone else from memory</div>
-                <div class="line">Spaced repetition: Review material at gradually increasing intervals</div>
-                <div class="line">Mind mapping: Draw concept relationships from memory</div>
-            </section>
-        </main>
+                    <section class="topic">
+                        <h2 class="section-title">How to Practice</h2>
+                        <div class="line">1. Read and understand the material thoroughly</div>
+                        <div class="line">2. Close your notes and try to recall the main points</div>
+                        <div class="line">3. Write down everything you remember without looking</div>
+                        <div class="line">4. Check your answers against the original material</div>
+                        <div class="line">5. Focus on areas where recall was difficult</div>
+                        <div class="line">6. Repeat the process with increasing time intervals</div>
+                    </section>
+
+                    <section class="topic">
+                        <h2 class="section-title">Common Techniques</h2>
+                        <div class="line">Flashcards: Create questions on one side, answers on the other</div>
+                        <div class="line">Self-quizzing: Test yourself regularly without looking at notes</div>
+                        <div class="line">Teaching others: Explain concepts to someone else from memory</div>
+                        <div class="line">Spaced repetition: Review material at gradually increasing intervals</div>
+                        <div class="line">Mind mapping: Draw concept relationships from memory</div>
+                    </section>
+                </main>
+            </details>
+        </section>
 
         <footer>
-            <p class="footer-text">Hover to learn • Click to interact</p>
+            <p class="footer-text">Learn • Practice • Get AI Feedback</p>
         </footer>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
