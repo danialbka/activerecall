@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Active Recall - Transform Your Learning</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Landing Page Specific Styles */
+        .landing-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .landing-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .landing-hero .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: white;
+            color: #667eea;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #f8f9fa;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #3498db;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card:nth-child(2) {
+            border-top-color: #9b59b6;
+        }
+
+        .feature-card:nth-child(3) {
+            border-top-color: #f39c12;
+        }
+
+        .feature-card:nth-child(4) {
+            border-top-color: #2ecc71;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: #2c3e50;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .how-it-works {
+            background: #f8f9fa;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .step p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .testimonial-section {
+            margin: 4rem 0;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .testimonial-section h2 {
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+
+        .testimonial {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #34495e;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            margin-top: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-style: normal;
+        }
+
+        .landing-footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #2c3e50;
+            color: white;
+            border-radius: 12px;
+            margin-top: 4rem;
+        }
+
+        .landing-footer h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .landing-footer p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .landing-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .landing-hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <h1>⚡ AI-Powered Active Recall</h1>
+            <p class="subtitle">Transform how you learn with AI-powered memory practice</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html" class="cta-button">⚡ Memory Palace</a>
+                <a href="recall.html" class="cta-button" style="background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid white;">📝 Active Recall</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section>
+            <h2 class="section-title" style="text-align: center; margin-bottom: 1rem;">Why Active Recall Works</h2>
+            <p style="text-align: center; color: #7f8c8d; margin-bottom: 2rem; font-size: 1.1rem;">
+                Active recall is scientifically proven to improve memory retention by up to 50%. 
+                Instead of passively re-reading, actively test your memory and strengthen neural pathways.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Active Recall Practice</h3>
+                    <p>Test your memory with blur-to-reveal content. Hover to peek at answers, then write what you remember from scratch.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Feedback</h3>
+                    <p>Get personalized teaching and improvement suggestions. Our AI identifies what you got right and provides memory techniques.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Tesla Memory Palace Mode</h3>
+                    <p>Unlock vivid spatial visualization inspired by Nikola Tesla's techniques. Transform concepts into unforgettable mental simulations.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Beautiful & Modern</h3>
+                    <p>Enjoy a clean, responsive interface designed for focus. Works seamlessly on desktop, tablet, and mobile devices.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Add Your Content</h3>
+                    <p>Type or paste your learning material. Use line breaks to separate different concepts.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Practice Recall</h3>
+                    <p>Hover over blurred answers to peek, then write what you remember in your own words.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Get AI Feedback</h3>
+                    <p>Click analyze to receive personalized feedback, memory techniques, and improvement suggestions.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Improve & Repeat</h3>
+                    <p>Use the feedback to strengthen weak areas and practice again with spaced repetition.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="testimonial-section">
+            <h2 class="section-title">Trusted by Learners</h2>
+            <div class="testimonial">
+                "Active recall has completely transformed my study routine. The AI feedback helps me understand exactly what I'm missing and provides creative memory techniques I never would have thought of."
+            </div>
+            <div class="testimonial-author">— Active Learner</div>
+        </section>
+
+        <!-- Learning Modes Section -->
+        <section style="margin: 4rem 0;">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Two Powerful Learning Modes</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card" style="border-top-color: #3498db;">
+                    <h3>📚 Standard Mode</h3>
+                    <p><strong>Perfect for:</strong> Structured learning, exam prep, factual recall</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: #7f8c8d; line-height: 1.8;">
+                        <li>Detailed score evaluation</li>
+                        <li>Structured feedback with memory techniques</li>
+                        <li>Clear comparison of correct vs your answers</li>
+                        <li>Practical improvement suggestions</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card" style="border-top-color: #f39c12;">
+                    <h3>⚡ Tesla Memory Palace Mode</h3>
+                    <p><strong>Perfect for:</strong> Complex concepts, visual learners, long-term retention</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: #7f8c8d; line-height: 1.8;">
+                        <li>Vivid spatial visualizations</li>
+                        <li>Cinematic mental simulations</li>
+                        <li>Emotional and sensory encoding</li>
+                        <li>Method of Loci memory techniques</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="landing-footer">
+            <h2>Ready to Transform Your Learning?</h2>
+            <p>Join thousands of learners using AI-powered active recall to master new concepts faster and remember longer.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html" class="cta-button" style="background: white; color: #667eea;">⚡ Try Memory Palace</a>
+                <a href="recall.html" class="cta-button" style="background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid white;">📝 Try Active Recall</a>
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
+                    No account required • 100% Free • Your data stays private
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="margin-top: 3rem;">
+            <p class="footer-text">Powered by OpenRouter & X.AI's Grok • Built with ❤️ for learners</p>
+        </footer>
+    </div>
+</body>
+</html>
+

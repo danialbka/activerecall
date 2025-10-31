@@ -1,4 +1,4 @@
-// AI-Powered Active Recall Learning
+// Active Recall Practice - Standard Mode Only
 
 document.addEventListener('DOMContentLoaded', function() {
     // Get elements
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Analyze button click handler
+    // Analyze button click handler (Standard mode only)
     analyzeButton.addEventListener('click', async function() {
         const apiKey = localStorage.getItem('openrouter_api_key');
         
@@ -140,12 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
         feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         
         try {
-            // Check if Tesla Memory Palace Mode is enabled
-            const teslaMode = document.getElementById('teslaMode').checked;
-            
-            // Call OpenRouter API
-            const feedback = await analyzeWithAI(apiKey, answers, teslaMode);
-            displayFeedback(feedback, teslaMode);
+            // Call OpenRouter API - Standard mode only
+            const feedback = await analyzeWithAI(apiKey, answers);
+            displayFeedback(feedback);
         } catch (error) {
             console.error('Error analyzing answers:', error);
             feedbackContent.innerHTML = `
@@ -276,69 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Function to call OpenRouter API
-    async function analyzeWithAI(apiKey, answers, teslaMode = false) {
+    // Function to call OpenRouter API - Standard mode only
+    async function analyzeWithAI(apiKey, answers) {
         // Filter only answered items
         const answeredItems = answers.filter(a => a.userAnswer !== '');
         
-        // Create prompt for AI based on mode
-        let prompt;
-        
-        if (teslaMode) {
-            // Tesla Memory Palace Mode Prompt
-            prompt = `You are a memory architect building a Tesla-style cognitive simulation for active recall learning.
-
-The student has tried to recall the following content from memory. Your mission is to:
-1. Briefly evaluate their recall accuracy
-2. Create a vivid, immersive **Memory Palace** to help them memorize the correct content
-3. Use the Method of Loci, Tesla-style visualization, and spatial encoding
-
-For EACH item, create:
-
-### 🏠 Setting
-{{Describe a vivid, memorable location/environment where this concept lives}}
-
-### 🔹 Visual Encoding
-{{Transform the concept into a cinematic scene with strong visual, emotional, and motion cues}}
-
-### ⚡ Tesla Simulation
-{{Describe how they can mentally simulate or replay this concept - make it dynamic and interactive}}
-
-### 🗺️ Memory Palace Map
-| Location | Visual Cue | Concept |
-|----------|------------|---------|
-{{Create a table showing the spatial layout}}
-
-### 🔁 Recall Practice Plan
-{{How to mentally walk through this memory and practice retrieval}}
-
-Style: Cinematic, imaginative, emotionally charged - like a guided visualization Tesla himself might use.
-
-IMPORTANT RULES:
-- Use vivid sensory details (sight, sound, touch, movement)
-- Create emotional hooks and surprising imagery
-- Make it spatial - give each concept a physical location
-- Use metaphors and analogies
-- Make it interactive - they should "experience" not just "see" it
-
-Respond in markdown format with clear sections for each concept.
-
----
-
-STUDENT'S PRACTICE SESSION:
-
-${answeredItems.map((item, idx) => `
-**Item ${idx + 1}:**
-- Correct Content: "${item.correct}"
-- Student's Attempt: "${item.userAnswer || "[No answer provided]"}"
-- Accuracy: {{Evaluate as Excellent/Good/Needs Improvement/Poor}}
-
-`).join('\n')}
-
-Create the Tesla Memory Palace for each item above. Make it vivid, spatial, and unforgettable.`;
-        } else {
-            // Standard Teaching Mode Prompt
-            prompt = `You are an expert cognitive learning tutor specializing in active recall and memory science. A student is practicing active recall - they tried to retrieve information from memory and wrote their answers. Your mission is to be their personal learning coach.
+        // Standard Teaching Mode Prompt
+        const prompt = `You are an expert cognitive learning tutor specializing in active recall and memory science. A student is practicing active recall - they tried to retrieve information from memory and wrote their answers. Your mission is to be their personal learning coach.
 
 TEACHING APPROACH:
 1. **Celebrate what they got right** - Reinforce correct neural pathways with positive feedback
@@ -377,7 +318,6 @@ Item ${idx + 1}:
 `).join('\n')}
 
 Respond ONLY with the JSON array, no additional text outside the JSON.`;
-        }
         
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
@@ -407,123 +347,75 @@ Respond ONLY with the JSON array, no additional text outside the JSON.`;
         const data = await response.json();
         const aiResponse = data.choices[0].message.content;
         
-        // Return response based on mode
-        if (teslaMode) {
-            // Tesla mode returns markdown text directly
-            return {
-                mode: 'tesla',
-                content: aiResponse,
-                items: answeredItems
-            };
-        } else {
-            // Standard mode: Parse JSON response
-            try {
-                // Try to extract JSON from response (in case AI added extra text)
-                const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
-                if (jsonMatch) {
-                    return {
-                        mode: 'standard',
-                        feedback: JSON.parse(jsonMatch[0])
-                    };
-                }
+        // Parse JSON response
+        try {
+            // Try to extract JSON from response (in case AI added extra text)
+            const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
+            if (jsonMatch) {
                 return {
                     mode: 'standard',
-                    feedback: JSON.parse(aiResponse)
-                };
-            } catch (e) {
-                // If JSON parsing fails, create structured feedback from text
-                return {
-                    mode: 'standard',
-                    feedback: answeredItems.map((item, idx) => ({
-                        index: item.index,
-                        score: 'Good',
-                        feedback: aiResponse
-                    }))
+                    feedback: JSON.parse(jsonMatch[0])
                 };
             }
+            return {
+                mode: 'standard',
+                feedback: JSON.parse(aiResponse)
+            };
+        } catch (e) {
+            // If JSON parsing fails, create structured feedback from text
+            return {
+                mode: 'standard',
+                feedback: answeredItems.map((item, idx) => ({
+                    index: item.index,
+                    score: 'Good',
+                    feedback: aiResponse
+                }))
+            };
         }
     }
     
-    // Function to display AI feedback
-    function displayFeedback(feedbackData, teslaMode = false) {
+    // Function to display AI feedback - Standard mode only
+    function displayFeedback(feedbackData) {
         feedbackContent.innerHTML = '';
         
-        if (teslaMode && feedbackData.mode === 'tesla') {
-            // Tesla Memory Palace Mode - Display as rich markdown
-            const teslaDiv = document.createElement('div');
-            teslaDiv.className = 'tesla-feedback';
+        // Standard Teaching Mode - Display as structured cards
+        const feedbackArray = feedbackData.feedback || feedbackData;
+        
+        feedbackArray.forEach((feedback, idx) => {
+            const itemIndex = feedback.index;
+            const item = practiceItems[itemIndex];
             
-            // Convert markdown to HTML (basic conversion)
-            let htmlContent = feedbackData.content
-                .replace(/### (.*?)$/gm, '<h3>$1</h3>')
-                .replace(/## (.*?)$/gm, '<h3>$1</h3>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code>$1</code>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>');
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'feedback-item';
             
-            // Handle tables
-            htmlContent = htmlContent.replace(/\|(.*?)\|(.*?)\|(.*?)\|/g, function(match, col1, col2, col3) {
-                if (col1.includes('---')) {
-                    return ''; // Skip separator row
-                }
-                const isHeader = col1.trim().match(/^[A-Z]/);
-                if (isHeader && !htmlContent.includes('<table>')) {
-                    return `<table><thead><tr><th>${col1.trim()}</th><th>${col2.trim()}</th><th>${col3.trim()}</th></tr></thead><tbody>`;
-                }
-                return `<tr><td>${col1.trim()}</td><td>${col2.trim()}</td><td>${col3.trim()}</td></tr>`;
-            });
+            // Determine score class
+            const scoreClass = feedback.score.toLowerCase().replace(/\s+/g, '-');
             
-            if (htmlContent.includes('<table>')) {
-                htmlContent = htmlContent.replace(/<\/tbody>$/, '') + '</tbody></table>';
-            }
-            
-            htmlContent = '<p>' + htmlContent + '</p>';
-            
-            teslaDiv.innerHTML = htmlContent;
-            feedbackContent.appendChild(teslaDiv);
-            
-        } else {
-            // Standard Teaching Mode - Display as structured cards
-            const feedbackArray = feedbackData.feedback || feedbackData;
-            
-            feedbackArray.forEach((feedback, idx) => {
-                const itemIndex = feedback.index;
-                const item = practiceItems[itemIndex];
+            feedbackDiv.innerHTML = `
+                <div class="feedback-item-header">
+                    <span class="feedback-item-number">Question ${itemIndex + 1}</span>
+                    <span class="feedback-score ${scoreClass}">${feedback.score}</span>
+                </div>
                 
-                const feedbackDiv = document.createElement('div');
-                feedbackDiv.className = 'feedback-item';
-                
-                // Determine score class
-                const scoreClass = feedback.score.toLowerCase().replace(/\s+/g, '-');
-                
-                feedbackDiv.innerHTML = `
-                    <div class="feedback-item-header">
-                        <span class="feedback-item-number">Question ${itemIndex + 1}</span>
-                        <span class="feedback-score ${scoreClass}">${feedback.score}</span>
+                <div class="feedback-comparison">
+                    <div class="feedback-text feedback-correct">
+                        <h4>✓ Correct Answer</h4>
+                        <p>${item.correctAnswer}</p>
                     </div>
-                    
-                    <div class="feedback-comparison">
-                        <div class="feedback-text feedback-correct">
-                            <h4>✓ Correct Answer</h4>
-                            <p>${item.correctAnswer}</p>
-                        </div>
-                        <div class="feedback-text feedback-yours">
-                            <h4>✍️ Your Answer</h4>
-                            <p>${item.inputElement.value || '<em>No answer provided</em>'}</p>
-                        </div>
+                    <div class="feedback-text feedback-yours">
+                        <h4>✍️ Your Answer</h4>
+                        <p>${item.inputElement.value || '<em>No answer provided</em>'}</p>
                     </div>
-                    
-                    <div class="feedback-teaching">
-                        <h4>🎓 AI Teacher Feedback</h4>
-                        <p>${feedback.feedback}</p>
-                    </div>
-                `;
+                </div>
                 
-                feedbackContent.appendChild(feedbackDiv);
-            });
-        }
+                <div class="feedback-teaching">
+                    <h4>🎓 AI Teacher Feedback</h4>
+                    <p>${feedback.feedback}</p>
+                </div>
+            `;
+            
+            feedbackContent.appendChild(feedbackDiv);
+        });
     }
     
     // Add smooth reveal style for clicked items
@@ -537,3 +429,4 @@ Respond ONLY with the JSON array, no additional text outside the JSON.`;
     `;
     document.head.appendChild(style);
 });
+

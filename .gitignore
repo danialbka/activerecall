@@ -1,0 +1,19 @@
+# Environment and configuration files with sensitive data
+.env
+config.js
+
+# Keep the example files
+!.env.example
+!config.example.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+

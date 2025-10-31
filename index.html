@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Powered Active Recall</title>
+    <title>⚡ Tesla Memory Palace Generator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="title">AI-Powered Active Recall</h1>
-            <p class="subtitle">Test your memory with AI-powered feedback</p>
+            <a href="recall.html" class="nav-link">📝 Try Active Recall Practice →</a>
+            <h1 class="title">⚡ Tesla Memory Palace Generator</h1>
+            <p class="subtitle">Transform any content into vivid spatial memories</p>
         </header>
+
+        <!-- Intro Section -->
+        <section class="memory-palace-intro">
+            <h2>What is a Memory Palace?</h2>
+            <p>A Memory Palace (Method of Loci) is an ancient technique where you visualize walking through a familiar place and associate concepts with specific locations. Inspired by Nikola Tesla's visualization methods, this tool automatically creates vivid, cinematic memory palaces that make learning unforgettable.</p>
+            <p><strong>Simply enter your content below and watch it transform into a spatial memory experience!</strong></p>
+        </section>
 
         <!-- API Key Section -->
         <section class="api-section">
@@ -29,7 +37,7 @@
                         <button id="saveApiKey" class="btn btn-small">Save</button>
                         <button id="clearApiKey" class="btn btn-small btn-secondary">Clear</button>
                     </div>
-                    <p class="api-hint">Get your API key from <a href="https://openrouter.ai/" target="_blank">openrouter.ai</a></p>
+                    <p class="api-hint">Get your API key from <a href="https://openrouter.ai/" target="_blank" rel="noreferrer">openrouter.ai</a></p>
                     <p class="api-status" id="apiStatus"></p>
                 </div>
             </details>
@@ -37,93 +45,134 @@
 
         <!-- Input Section -->
         <section class="input-section">
-            <h2 class="section-title">Add Your Learning Content</h2>
+            <h2 class="section-title">Enter Your Learning Content</h2>
+
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button id="directModeTab" class="mode-tab active" data-mode="direct">
+                    📝 Direct Content
+                </button>
+                <button id="goalModeTab" class="mode-tab" data-mode="goal">
+                    🎯 Learning Goal
+                </button>
+            </div>
+
             <div class="input-container">
-                <textarea 
-                    id="textInput" 
-                    class="text-input" 
-                    placeholder="Type or paste your learning content here... (one line per paragraph or use line breaks)"
-                    rows="4"></textarea>
+                <!-- Direct Content Mode -->
+                <div id="directMode" class="input-mode active">
+                    <textarea 
+                        id="textInput" 
+                        class="text-input" 
+                        placeholder="Type or paste your learning content here... (Use line breaks to separate different concepts or facts)"
+                        rows="6"></textarea>
+                    <p class="input-hint">
+                        💡 Paste or type your learning material directly. Each line break creates a separate concept.
+                    </p>
+                </div>
+
+                <!-- Learning Goal Mode -->
+                <div id="goalMode" class="input-mode" style="display: none;">
+                    <textarea 
+                        id="goalInput" 
+                        class="text-input" 
+                        placeholder="Describe what you want to learn... (e.g., 'I want to learn about photosynthesis', 'Teach me about the French Revolution', 'I need to understand quantum mechanics')"
+                        rows="6"></textarea>
+                    <p class="input-hint">
+                        🧠 We’ll expand your learning goal into structured concepts before building the palace.
+                    </p>
+                </div>
+
+                <!-- Theme Input -->
+                <div class="theme-input">
+                    <label for="themeInput">Optional Theme:</label>
+                    <input 
+                        type="text" 
+                        id="themeInput" 
+                        class="text-input" 
+                        placeholder="e.g., Harry Potter, Star Wars, Game of Thrones..."
+                    >
+                    <p class="input-hint">
+                        🎭 Make your Memory Palace themed! Enter any show, movie, book, or fantasy world you love. Leave blank for a classic Tesla-style palace.
+                    </p>
+                </div>
+
                 <div class="button-group">
-                    <button id="addButton" class="btn btn-primary">Add Content</button>
-                    <button id="clearButton" class="btn btn-secondary">Clear All</button>
+                    <button id="generateButton" class="btn btn-primary">⚡ Generate Memory Palace</button>
+                    <button id="clearButton" class="btn btn-secondary">Clear</button>
                 </div>
+                <p class="input-hint">
+                    💡 Tip: Press Ctrl+Enter (or Cmd+Enter on Mac) to generate quickly.
+                </p>
             </div>
         </section>
 
-        <!-- User Practice Content (Two Column Layout) -->
-        <section class="practice-section" id="practiceSection" style="display: none;">
-            <div class="practice-header">
-                <h2 class="section-title">Practice Mode</h2>
-                <div class="practice-controls">
-                    <label class="toggle-container">
-                        <input type="checkbox" id="teslaMode" class="toggle-checkbox">
-                        <span class="toggle-label">⚡ Tesla Memory Palace Mode</span>
-                        <span class="toggle-hint">Unlock vivid spatial visualization</span>
-                    </label>
-                    <button id="analyzeButton" class="btn btn-primary btn-analyze">🤖 Analyze My Answers</button>
-                </div>
-            </div>
-            <p class="practice-instructions">Hover over the left column to peek at the answer. Write what you remember in the right column.</p>
-            
-            <div id="practiceContent" class="practice-grid"></div>
-        </section>
-
-        <!-- AI Feedback Section -->
+        <!-- Memory Palace Output Section -->
         <section class="feedback-section" id="feedbackSection" style="display: none;">
-            <h2 class="section-title">AI Feedback</h2>
+            <h2 class="section-title">Your Memory Palace Timeline</h2>
             <div id="feedbackContent" class="feedback-content"></div>
+            <div id="chatSection" class="chat-section" style="display: none;">
+                <h3 class="chat-title">💬 Continue the Conversation</h3>
+                <div id="chatMessages" class="chat-messages"></div>
+                <form id="chatForm" class="chat-form">
+                    <textarea 
+                        id="chatInput" 
+                        class="chat-input" 
+                        placeholder="Ask follow-up questions, request variations, or get walkthrough coaching..." 
+                        rows="2"></textarea>
+                    <div class="chat-actions">
+                        <span id="chatStatus" class="chat-status"></span>
+                        <button id="chatSendButton" class="btn btn-primary" type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
         </section>
 
-        <!-- Demo Content (Collapsible) -->
+        <!-- How It Works Section -->
         <section class="demo-section">
             <details>
-                <summary class="demo-toggle">📚 View Demo Content (Examples)</summary>
+                <summary class="demo-toggle">📖 How Memory Palaces Work</summary>
                 <main class="content">
                     <section class="topic">
-                        <h2 class="section-title">What is Active Recall?</h2>
-                        <div class="line">Active recall is a learning technique where you actively stimulate memory during the learning process.</div>
-                        <div class="line">Instead of passively re-reading material, you test yourself on what you've learned.</div>
-                        <div class="line">This method strengthens neural pathways and improves long-term retention.</div>
-                        <div class="line">Studies show it's one of the most effective study strategies available.</div>
+                        <h2 class="section-title">The Method of Loci</h2>
+                        <p>
+                            The Memory Palace technique dates back to ancient Greece. You mentally walk through a familiar place (like your home) and place concepts at specific locations. When you need to recall them, you simply "walk" through the palace again.
+                        </p>
+                        <p>
+                            Our AI transforms your content into vivid, sensory-rich locations that are easy to visualize and remember. Each concept becomes a distinct "room" or "object" in your mental palace.
+                        </p>
                     </section>
 
                     <section class="topic">
-                        <h2 class="section-title">Key Benefits</h2>
-                        <div class="line">• Enhances long-term memory retention by up to 50%</div>
-                        <div class="line">• Identifies knowledge gaps early in the learning process</div>
-                        <div class="line">• Reduces study time while increasing comprehension</div>
-                        <div class="line">• Builds confidence through repeated successful retrieval</div>
-                        <div class="line">• Creates stronger neural connections in the brain</div>
+                        <h2 class="section-title">Why It Works</h2>
+                        <ul>
+                            <li><strong>Spatial Memory:</strong> Our brains are excellent at remembering locations and spatial relationships.</li>
+                            <li><strong>Sensory Encoding:</strong> Vivid imagery engages multiple senses, creating stronger memories.</li>
+                            <li><strong>Emotional Hooks:</strong> Surprising and emotional imagery sticks better than plain facts.</li>
+                            <li><strong>Visualization:</strong> Like Tesla visualizing inventions before building them, you see concepts before recalling them.</li>
+                        </ul>
                     </section>
 
                     <section class="topic">
-                        <h2 class="section-title">How to Practice</h2>
-                        <div class="line">1. Read and understand the material thoroughly</div>
-                        <div class="line">2. Close your notes and try to recall the main points</div>
-                        <div class="line">3. Write down everything you remember without looking</div>
-                        <div class="line">4. Check your answers against the original material</div>
-                        <div class="line">5. Focus on areas where recall was difficult</div>
-                        <div class="line">6. Repeat the process with increasing time intervals</div>
-                    </section>
-
-                    <section class="topic">
-                        <h2 class="section-title">Common Techniques</h2>
-                        <div class="line">Flashcards: Create questions on one side, answers on the other</div>
-                        <div class="line">Self-quizzing: Test yourself regularly without looking at notes</div>
-                        <div class="line">Teaching others: Explain concepts to someone else from memory</div>
-                        <div class="line">Spaced repetition: Review material at gradually increasing intervals</div>
-                        <div class="line">Mind mapping: Draw concept relationships from memory</div>
+                        <h2 class="section-title">Best Practices</h2>
+                        <ul>
+                            <li>Enter related concepts together for a cohesive palace.</li>
+                            <li>Use line breaks to separate different ideas.</li>
+                            <li>Visualize walking through your palace regularly.</li>
+                            <li>Engage all your senses when practicing recall.</li>
+                            <li>Review the palace multiple times with increasing intervals.</li>
+                        </ul>
                     </section>
                 </main>
             </details>
         </section>
 
         <footer>
-            <p class="footer-text">Learn • Practice • Get AI Feedback</p>
+            <p class="footer-text">Transform Concepts • Build Palaces • Remember Forever</p>
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="db.js"></script>
+    <script src="memory-palace.js"></script>
 </body>
 </html>
